@@ -13,11 +13,46 @@ export class TicketsService {
   constructor(private prismaService: PrismaService) {}
 
   async create(createTicketDto: CreateTicketDto) {
+    console.log(createTicketDto.quantity, 'quantity of tickets to create');
+
+    const tickets = [];
+
     try {
-      console.log(createTicketDto, 'this is what we receive in the endpoint?');
-      return await this.prismaService.tickets.create({
-        data: createTicketDto,
+      for (let i = 0; i < createTicketDto.quantity; i++) {
+        const ticket = await this.prismaService.tickets.create({
+          data: {
+            event_time_id: createTicketDto.event_time_id,
+            purchaser_id: createTicketDto.purchaser_id,
+            event_id: createTicketDto.event_id,
+            seat_location: createTicketDto.seat_location,
+            price_per_ticket: createTicketDto.price_per_ticket,
+            payer_email: createTicketDto.payer_email,
+            payer_id: createTicketDto.payer_id,
+            payer_firstName: createTicketDto.payer_firstName,
+            payer_lastName: createTicketDto.payer_lastName,
+            identification_num: createTicketDto.identification_num,
+            identification_type: createTicketDto.identification_type,
+          },
+        });
+
+        tickets.push(ticket);
+      }
+
+      const purchase = await this.prismaService.purchases.create({
+        data: {
+          purchaser_id: createTicketDto.purchaser_id,
+          event_time_id: createTicketDto.event_time_id,
+          total_quantity: createTicketDto.quantity,
+          total_price:
+            createTicketDto.price_per_ticket * createTicketDto.quantity,
+        },
       });
+
+      console.log(purchase);
+
+      console.log('total of tickets', tickets);
+
+      return tickets;
     } catch (error) {
       // if (error instanceof Prisma.PrismaClientKnownRequestError) {
       //   if (error.code === 'P2002') {
