@@ -11,12 +11,48 @@ datasource db {
 }
 
 model Tickets {
-  id Int @id @default(autoincrement())
-  name String
-  email String @unique @default("placeholder@example.com")
-  description String?
-  price Float
-  image String?
+  ticket_id Int @id @default(autoincrement())
+  event_time_id Int
+  event_id Int
+  purchaser_id Int
+  location Int?
+  seat_location String
+  price_per_ticket Int
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt
+}
+
+model Events {
+  event_id Int @id @default(autoincrement())
+  event_name String?
+  location String?
+  description DateTime?
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime @updatedAt
+}
+
+model EventTimes {
+  event_time_id Int @id @default(autoincrement())
+  event_id Int
+  datetime DateTime
+  createdAt DateTime @default(now())
+}
+
+model Purchases {
+  purchase_id Int @id @default(autoincrement())
+  purchaser_id Int
+  event_time_id Int
+  total_quantity Int
+  total_price Int
+  createdAt DateTime @default(now()) 
+}
+
+model Users {
+  id Int @id @default(autoincrement())
+  purchaser_id Int
+  name String
+  last_name String
+  dni String
+  email String
+  password String
 }

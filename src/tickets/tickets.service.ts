@@ -14,17 +14,19 @@ export class TicketsService {
 
   async create(createTicketDto: CreateTicketDto) {
     try {
+      console.log(createTicketDto, 'this is what we receive in the endpoint?');
       return await this.prismaService.tickets.create({
         data: createTicketDto,
       });
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ConflictException(
-            `Ticket with the same ${createTicketDto.email} already exists`,
-          );
-        }
-      }
+      // if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      //   if (error.code === 'P2002') {
+      //     throw new ConflictException(
+      //       `Ticket with the same ${createTicketDto.email} already exists`,
+      //     );
+      //   }
+      // }
+      console.log(error);
     }
   }
 
@@ -35,7 +37,7 @@ export class TicketsService {
   async findOne(id: number) {
     const ticketFound = await this.prismaService.tickets.findUnique({
       where: {
-        id: id,
+        ticket_id: id,
       },
     });
 
@@ -49,7 +51,7 @@ export class TicketsService {
   async update(id: number, updateTicketDto: UpdateTicketDto) {
     const productUpdated = await this.prismaService.tickets.update({
       where: {
-        id: id,
+        ticket_id: id,
       },
       data: updateTicketDto,
     });
@@ -64,7 +66,7 @@ export class TicketsService {
   async remove(id: number) {
     const deletedTicket = await this.prismaService.tickets.delete({
       where: {
-        id: id,
+        ticket_id: id,
       },
     });
 
