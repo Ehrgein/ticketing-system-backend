@@ -15,8 +15,15 @@ export class PurchasesService {
     return this.prismaService.purchases.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} purchase`;
+  async findOne(id: number) {
+    const ticketsWithPurchase = await this.prismaService.purchases.findUnique({
+      where: { purchase_id: id },
+      include: {
+        tickets: true,
+      },
+    });
+
+    return ticketsWithPurchase;
   }
 
   update(id: number, updatePurchaseDto: UpdatePurchaseDto) {

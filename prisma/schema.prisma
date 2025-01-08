@@ -28,6 +28,9 @@ model Tickets {
   identification_type String
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt
+
+  purchase_id Int?
+  purchase   Purchases? @relation(fields: [purchase_id], references: [purchase_id])
 }
 
 model Events {
@@ -54,6 +57,8 @@ model Purchases {
   total_price Int
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt
+
+  tickets Tickets[]
 }
 
 model Users {
