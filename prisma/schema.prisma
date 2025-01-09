@@ -1,72 +1,66 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = "postgresql://postgres:asdwow123@localhost:5432/ticketing_db"
 }
 
 model Tickets {
-  ticket_id Int @id @default(autoincrement())
-  event_time_id Int
-  // purchaser is the account that bought the ticket, the id for it. payer is whoever paid for the ticket. Probably dont need payer_id butpayer name and last name
-  purchaser_id Int
-  event_id Int
-  location Int?
-  seat_location String
-  quantity Int?
-  price_per_ticket Int
-  payer_email String
-  payer_id String
-  payer_firstName String
-  payer_lastName String
-  identification_num String
-  identification_type String
-  createdAt DateTime @default(now()) 
-  updatedAt DateTime @updatedAt
-
-  purchase_id Int?
-  purchase   Purchases? @relation(fields: [purchase_id], references: [purchase_id])
+  ticket_id           Int        @id @default(autoincrement())
+  event_time_id       Int
+  purchaser_id        Int
+  event_id            Int
+  location            Int?
+  seat_location       String
+  quantity            Int?
+  price_per_ticket    Int
+  payer_email         String
+  payer_id            String
+  payer_firstName     String
+  payer_lastName      String
+  identification_num  String
+  identification_type String?
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  purchase_id         Int?
+  purchase            Purchases? @relation(fields: [purchase_id], references: [purchase_id])
 }
 
 model Events {
-  event_id Int @id @default(autoincrement())
-  event_name String?
-  location String?
+  event_id    Int       @id @default(autoincrement())
+  event_name  String?
+  location    String?
   description DateTime?
-  createdAt DateTime @default(now()) 
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model EventTimes {
-  event_time_id Int @id @default(autoincrement())
-  event_id Int
-  datetime DateTime
-  createdAt DateTime @default(now())
+  event_time_id Int      @id @default(autoincrement())
+  event_id      Int
+  datetime      DateTime
+  createdAt     DateTime @default(now())
 }
 
 model Purchases {
-  purchase_id Int @id @default(autoincrement())
-  purchaser_id Int
-  event_time_id Int
+  purchase_id    Int       @id @default(autoincrement())
+  purchaser_id   Int
+  event_time_id  Int
   total_quantity Int
-  total_price Int
-  createdAt DateTime @default(now()) 
-  updatedAt DateTime @updatedAt
-
-  tickets Tickets[]
+  total_price    Int
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  tickets        Tickets[]
 }
 
 model Users {
-  id Int @id @default(autoincrement())
+  id           Int    @id @default(autoincrement())
   purchaser_id Int
-  name String
-  last_name String
-  dni String
-  email String
-  password String
+  name         String
+  last_name    String
+  dni          String
+  email        String
+  password     String
 }
