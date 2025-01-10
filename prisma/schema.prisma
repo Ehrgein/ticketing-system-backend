@@ -31,17 +31,26 @@ model Tickets {
 model Events {
   event_id    Int       @id @default(autoincrement())
   event_name  String?
+  description String?
   location    String?
-  description DateTime?
+ 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  event_info  EventInfo[] @relation("EventToEventInfo")
 }
 
-model EventTimes {
-  event_time_id Int      @id @default(autoincrement())
+model EventInfo {
+  event_info_id Int      @id @default(autoincrement())
   event_id      Int
+  event Events @relation(fields: [event_id], references: [event_id], name: "EventToEventInfo")
   datetime      DateTime
-  createdAt     DateTime @default(now())
+  price_per_ticket Int
+  available_seats String[]
+  location String
+  status String @default("scheduled")
+  createdAt DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Purchases {
