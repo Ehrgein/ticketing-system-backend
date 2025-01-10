@@ -43,10 +43,10 @@ model Events {
 model EventInfo {
   event_info_id Int      @id @default(autoincrement())
   event_id      Int
-  event Events @relation(fields: [event_id], references: [event_id], name: "EventToEventInfo")
+  event     Events @relation(fields: [event_id], references: [event_id], name: "EventToEventInfo")
   datetime      DateTime
   price_per_ticket Int
-  available_seats String[]
+  ticket_availability Int @default(0)
   location String
   status String @default("scheduled")
   createdAt DateTime @default(now())

@@ -8,7 +8,26 @@ export class EventsService {
   constructor(private prismaService: PrismaService) {}
 
   create(createEventDto: CreateEventDto) {
-    return 'This action adds a new event';
+    console.log(createEventDto);
+
+    const eventInfoData = createEventDto.datetime.map((datetime) => ({
+      datetime: new Date(datetime), // Convert ISO string to Date object
+      price_per_ticket: createEventDto.price_per_ticket, // Price per ticket
+      ticket_availability: createEventDto.ticket_availability, // Ticket availability
+      location: createEventDto.location, // Location
+      status: 'scheduled', // Default status
+    }));
+
+    return this.prismaService.events.create({
+      data: {
+        event_name: createEventDto.event_name,
+        description: createEventDto.description,
+        location: createEventDto.location,
+        event_info: {
+          create: eventInfoData,
+        },
+      },
+    });
   }
 
   findAll() {
