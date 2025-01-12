@@ -25,6 +25,8 @@ model Tickets {
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
   purchase_id         Int?
+
+  event_info          EventInfo? @relation(fields: [event_time_id], references: [event_info_id]) // Added relation
   purchase            Purchases? @relation(fields: [purchase_id], references: [purchase_id])
 }
 
@@ -38,6 +40,7 @@ model Events {
   updatedAt   DateTime  @updatedAt
 
   event_info  EventInfo[] @relation("EventToEventInfo")
+  
 }
 
 model EventInfo {
@@ -51,6 +54,7 @@ model EventInfo {
   status String @default("scheduled")
   createdAt DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  tickets             Tickets[]   // Added relation to Tickets
 }
 
 model Purchases {

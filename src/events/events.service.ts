@@ -39,7 +39,16 @@ export class EventsService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} event`;
+    return this.prismaService.events.findUnique({
+      where: { event_id: id },
+      include: {
+        event_info: {
+          include: {
+            tickets: true,
+          },
+        },
+      },
+    });
   }
 
   update(id: number, updateEventDto: UpdateEventDto) {
